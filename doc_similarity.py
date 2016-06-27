@@ -2,13 +2,7 @@
 #
 # for a particular model, see which documents are most and least like
 # an example drawn at random
-#
-# the script takes an optional paramter to set the number of similar documents
-# to display (which defaults to 3)
 
-# parameters
-show_n_documents = 3
-minimum_n = 20      # exclude infrequent words
 model_name = "dm+m.model" # "dm+c.model"
                           # "dm+m.model"
                           # avoid "dbow" because it's not been trained
@@ -39,42 +33,35 @@ import os.path
 assert os.path.isfile(data_path + "alldata-id.txt"), "alldata-id.txt is unavailable"
 assert os.path.isfile(model_path + model_name), model_name + " is unavailable"
 
+print("The program will choose one document at random, and then identify the",
+      "three most similar, one least similar, and a the most perfectly 'median'",
+      "document from the set.")
+print()
+
+# accept list of words as arguments - if none, draw one word at random
+#word_list = sys.argv
+#word_list.remove(sys.argv[0]) # get rid of script name
+
 # load up the model
 model = Doc2Vec.load(model_path + model_name)
 
-# load the corresponding vocabulary list
+# load all_docs
+SentimentDocument = namedtuple('SentimentDocument', 'words tags split sentiment')
+alldocs = []  # will hold all docs in original order
+with open('aclImdb/alldata-id.txt', encoding='utf-8') as alldata:
+    for line_no, line in enumerate(alldata):
+        tokens = gensim.utils.to_unicode(line).split()
+        words = tokens[1:]
+        tags = [line_no] # `tags = [tokens[0]]` would also work at extra memory cost
+        split = ['train','test','extra','extra'][line_no//25000]  # 25k train, 25k test, 25k extra
+        sentiment = [1.0, 0.0, 1.0, 0.0, None, None, None, None][line_no//12500] # [12.5K pos, 12.5K neg]*2 then unknown
+        alldocs.append(SentimentDocument(words, tags, split, sentiment))
+# I don't think the train/test matters for this purpose, but it's in the reference code
 
-# accept list of words as arguments - if none, draw one word at random
-word_list = sys.argv
-word_list.remove(sys.argv[0]) # get rid of script name
-
-randomized = False
-if len(word_list) == 0:
-    randomized = True
-    while True:
-        word = random.choice(model.index2word)
-        if model.vocab[word].count >= minimum_n:
-            word_list.append(word)
-            break
-
-for word in word_list:
-    if word not in model.vocab:
-        print(word, "is not present in this corpus.")
-        print()
-
-    elif model.vocab[word].count < minimum_n:
-        print(word, "appears fewer than", minimum_n, "times in this corpus.")
-        print()
-
-    else:
-        similar_words = [str(model.most_similar(word, topn=20)).replace('), ','),<br>\n')]
-
-        if randomized:
-            print("WORD DRAWN AT RANDOM...", word)
-            print()
-
-        print(word, "is similar to:")
-        print(similar_words)
-        print()
-
-print("To repeat, invoke similarity.py with words as arguments")
+# adapted from https://github.com/RaRe-Technologies/gensim/blob/develop/docs/notebooks/doc2vec-IMDB.ipynb
+doc_id = np.random.randint(model.docvecs.count)  # pick random doc, re-run cell for more examples
+sims = model.docvecs.most_similar(doc_id, topn=model.docvecs.count)  # get *all* similar documents
+print(u'TARGET (%d): «%s»\n' % (doc_id, ' '.join(alldocs[doc_id].words)))
+print(u'SIMILAR/DISSIMILAR DOCS PER MODEL %s:\n' % model)
+for label, index in [('MOST', 0), ('SECOND MOST', 1), ('THIRD MOST', 2), ('MEDIAN', len(sims)//2), ('LEAST', len(sims) - 1)]:
+    print(u'%s %s: «%s»\n' % (label, sims[index], ' '.join(alldocs[sims[index][0]].words)))
