@@ -1,0 +1,21 @@
+# IMDB anaysis with Doc2Vec
+(I used Python 3.4 through an Anaconda install of python.)
+
+The total process should take a couple of hours on a reasonably
+fast machine, many more on a slow laptop. Once that setup is
+run, however, the models can be reloaded for later analysis.
+
+step: Download the IMDB
+# did I take that part out of the script?
+
+the prep script is run first
+the folders script is run second
+the process script is run third (and takes a long time)
+
+Then you can run the similarity.py script to see word vectors.
+
+To come: a short script about analogy testing.
+
+Not done: testing accuracy percentages against sentiment analysis
+(which was not my interest and, in any event, seems to require 
+repeating the whole training process each time it runs).
