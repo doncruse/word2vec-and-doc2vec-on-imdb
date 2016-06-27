@@ -1,10 +1,17 @@
-# word similarity lists
+# examine document similarity
+#
+# for a particular model, see which documents are most and least like
+# an example drawn at random
+#
+# the script takes an optional paramter to set the number of similar documents
+# to display (which defaults to 3)
 
 # parameters
+show_n_documents = 3
 minimum_n = 20      # exclude infrequent words
 model_name = "dm+m.model" # "dm+c.model"
                           # "dm+m.model"
-                          # avoid "dbow" because it has not been trained
+                          # avoid "dbow" because it's not been trained
 model_path = "models/"
 data_path = "aclImdb/"
 
