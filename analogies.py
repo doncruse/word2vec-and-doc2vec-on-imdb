@@ -4,6 +4,7 @@
 model_names = ["dm+m.model", "dm+c.model", "dbow.model"]
 model_path = "models/"
 data_path = "aclImdb/"
+top_n_words = 2500
 
 # setting up the environment
 import locale
@@ -48,4 +49,8 @@ for model_name in model_names:
     sections = model.accuracy(analogy_filename)
     correct, incorrect = len(sections[-1]['correct']), len(sections[-1]['incorrect'])
     print("Results of testing", model_name, "against file", analogy_filename)
+    print('%s: %0.2f%% correct (%d of %d)' % (model, float(correct*100)/(correct+incorrect), correct, correct+incorrect))
+    sections = model.accuracy(analogy_filename, top_n_words)
+    correct, incorrect = len(sections[-1]['correct']), len(sections[-1]['incorrect'])
+    print("... restricted to top", top_n_words,"words")
     print('%s: %0.2f%% correct (%d of %d)' % (model, float(correct*100)/(correct+incorrect), correct, correct+incorrect))

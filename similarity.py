@@ -2,7 +2,7 @@
 
 # parameters
 minimum_n = 20      # exclude infrequent words
-model_name = "dm+m.model" # "dm+c.model"
+model_name = "dm+c.model" # "dm+c.model"
                           # "dm+m.model"
                           # avoid "dbow" because it has not been trained
 model_path = "models/"
