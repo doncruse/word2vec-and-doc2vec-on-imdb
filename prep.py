@@ -6,6 +6,7 @@ import tarfile
 
 dirname = 'aclImdb'
 filename = 'aclImdb_v1.tar.gz'
+local_filename = dirname + "/" + filename
 locale.setlocale(locale.LC_ALL, 'C')
 
 # Convert text to lower-case and strip punctuation/symbols from words
@@ -22,18 +23,18 @@ def normalize_text(text):
     return norm_text
 
 
-if not os.path.isfile('aclImdb/alldata-id.txt'):
-    if not os.path.isdir(dirname):
-        if not os.path.isfile(filename):
+if not os.path.isfile(dirname + "/" + "alldata-id.txt"):
+    if os.path.isdir(dirname):
+        if not os.path.isfile(local_filename):
             # Download IMDB archive
             url = 'http://ai.stanford.edu/~amaas/data/sentiment/' + filename
             r = requests.get(url)
-            with open(filename, 'wb') as f:
+            with open(local_filename, 'wb') as f:
                 f.write(r.content)
 
-        tar = tarfile.open(filename, mode='r')
-        tar.extractall()
-        tar.close()
+            tar = tarfile.open(local_filename, mode='r')
+            tar.extractall()
+            tar.close()
 
     # Concat and normalize test/train data
     folders = ['train/pos', 'train/neg', 'test/pos', 'test/neg', 'train/unsup']
