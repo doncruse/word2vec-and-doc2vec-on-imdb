@@ -20,7 +20,7 @@ run very quickly.
 
 ## Exploring the Models
 
-I wrote several scripts to explore the models. There are three models in the folder, but only two of them have been suitably trained.
+These are the models trained by the scripts above. All four of them contain trained document vectors. Three of them also contain usefully trained word vectors. (The plain "dbow" model lacks trained word vectors.)
 
 * `dm+m.model`
 
@@ -30,16 +30,17 @@ I wrote several scripts to explore the models. There are three models in the fol
 
 * `dbow+w.model` - This version *does* train the word vectors, along with the document vectors.
 
+These models can be loaded into a python shell using the normal `gensim` syntax for loading a Doc2Vec model. I have also written the scripts below to explore the word and document vectors.
+
 ### Word Vectors
 
 * `similarity.py` - This script lets you pick a word from the corpus and see which other words are deemed closest by Word2Vec.
 
-  If you invoke the script without arguments, it chooses a word at random.
+  If you invoke the script without arguments, a word is chosen at random for you.
 
-  Alternatively, you can suggest words as arguments and (if the word is in the database a sufficient number of times to yield interesting results) see the corresponding list for each of your chosen words.
+  Alternatively, you can suggest one or more words as arguments and (if each word is in the database a sufficient number of times to yield interesting results), you will see what other words in the corpus are deemed similar to each word you have listed.
 
-* `analogies.py` - This script compares the trained models to a set of
-  analogies published by Google with the original Word2Vec implementation.
+* `analogies.py` - This script assesses the accuracy of the models against a set of analogies published by Google with the original Word2Vec implementation.
 
   Keep in mind the IMDB data set is very small and that it is focused on a narrow problem domain. Even so, the system has learned a fair number of relative meanings.
 
