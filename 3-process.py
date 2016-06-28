@@ -36,8 +36,13 @@ assert gensim.models.doc2vec.FAST_VERSION > -1, "this will be painfully slow oth
 simple_models = [
     # PV-DM w/concatenation - window=5 (both sides) approximates paper's 10-word total window size
     Doc2Vec(dm=1, dm_concat=1, size=100, window=5, negative=5, hs=0, min_count=2, workers=cores),
+
     # PV-DBOW
     Doc2Vec(dm=0, size=100, negative=5, hs=0, min_count=2, workers=cores),
+
+    # PV-DBOW w/ word training
+    Doc2Vec(dm=0, dbow_words=1, size=100, negative=5, hs=0, min_count=2, workers=cores),
+
     # PV-DM w/average
     Doc2Vec(dm=1, dm_mean=1, size=100, window=10, negative=5, hs=0, min_count=2, workers=cores),
 ]
@@ -52,9 +57,11 @@ for model in simple_models[1:]:
 models_by_name = OrderedDict((str(model), model) for model in simple_models)
 
 # This is how you concatenate two models -- presumably for other vectors as well
-from gensim.test.test_doc2vec import ConcatenatedDoc2Vec
-models_by_name['dbow+dmm'] = ConcatenatedDoc2Vec([simple_models[1], simple_models[2]])
-models_by_name['dbow+dmc'] = ConcatenatedDoc2Vec([simple_models[1], simple_models[0]])
+#from gensim.test.test_doc2vec import ConcatenatedDoc2Vec
+#models_by_name['dbow+dmm'] = ConcatenatedDoc2Vec([simple_models[1], simple_models[2]])
+#models_by_name['dbow+dmc'] = ConcatenatedDoc2Vec([simple_models[1], simple_models[0]])
+# skipped because these cannot be saved with .save()
+# TODO: concatenated vector option for similarity, analogies, and doc_similarity
 
 # Helper methods for determining error rates
 import numpy as np

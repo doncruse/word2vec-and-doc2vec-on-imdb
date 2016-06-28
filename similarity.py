@@ -4,7 +4,8 @@
 minimum_n = 20      # exclude infrequent words
 model_name = "dm+c.model" # "dm+c.model"
                           # "dm+m.model"
-                          # avoid "dbow" because it has not been trained
+                          # "dbow+w.model" (has trained word vectors)
+                          # "dbow.model" (warning: word vectors not trained)
 model_path = "models/"
 data_path = "aclImdb/"
 

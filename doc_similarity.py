@@ -3,9 +3,10 @@
 # for a particular model, see which documents are most and least like
 # an example drawn at random
 
-model_name = "dm+m.model" # "dm+c.model"
-                          # "dm+m.model"
-                          # avoid "dbow" because it's not been trained
+model_name = "dbow+w.model" # "dm+c.model"
+                            # "dm+m.model"
+                            # "dbow+w.model" (has trained word vectors)
+                            # "dbow.model" (documents trained; words not)
 model_path = "models/"
 data_path = "aclImdb/"
 
@@ -35,7 +36,7 @@ assert os.path.isfile(model_path + model_name), model_name + " is unavailable"
 
 print("The program will choose one document at random, and then identify the",
       "three most similar, one least similar, and a the most perfectly 'median'",
-      "document from the set.")
+      "document -- using the trained model", model_name)
 print()
 
 # accept list of words as arguments - if none, draw one word at random
